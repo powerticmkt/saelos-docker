@@ -71,12 +71,14 @@ RUN a2dissite 000-default.conf && a2ensite laravel.conf && a2enmod rewrite
 
 VOLUME /var/www/html
 
-COPY docker-apache/docker-php-entrypoint.sh /entrypoint.sh
+COPY docker-apache/docker-entrypoint.sh /usr/local/bin/
 
-RUN ["chmod", "+x", "/entrypoint.sh"]
+RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+
+RUN ["chmod", "+x", "/docker-entrypoint.sh.sh"]
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 80
-
-ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["apache2-foreground"]
