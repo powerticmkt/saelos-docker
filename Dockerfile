@@ -57,6 +57,11 @@ RUN docker-php-ext-enable imagick
 
 WORKDIR /var/www/html
 
+ENV SAELOS_DB_USER 'root'
+ENV SAELOS_DB_PASSWORD ''
+ENV SAELOS_DB_HOST 'localhost'
+ENV SAELOS_DB_NAME 'saelos'
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
@@ -70,6 +75,8 @@ COPY docker-apache/apache2-laravel.conf /etc/apache2/sites-available/laravel.con
 RUN a2dissite 000-default.conf && a2ensite laravel.conf && a2enmod rewrite
 
 VOLUME /var/www/html
+
+COPY my.cnf /root/.my.cnf
 
 COPY docker-apache/docker-entrypoint.sh /usr/local/bin/
 
