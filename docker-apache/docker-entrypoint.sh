@@ -5,7 +5,7 @@ set -e
 cd /var/www/html
 
 if [ ! -f /var/www/html/.env ]; then
-   git clone https://github.com/saelos/saelos.git /var/www/html
+   git clone -b staging --single-branch https://github.com/saelos/saelos.git /var/www/html
 fi
 
 composer install --no-dev

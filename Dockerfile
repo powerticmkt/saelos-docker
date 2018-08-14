@@ -28,9 +28,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       libmcrypt-dev \
       wget \
       curl \
+      gnupg \
       libmcrypt-dev \
-    && rm -r /var/lib/apt/lists/* \
-    && docker-php-ext-install mbstring intl zip gd exif \
+    && rm -r /var/lib/apt/lists/*
+
+RUN docker-php-ext-install mbstring intl zip exif \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-install \
       intl \
@@ -44,6 +46,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       opcache \
       && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
       && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
+    && docker-php-ext-install imap  \
+    && docker-php-ext-enable imap
 
 RUN docker-php-ext-configure gd \
       --enable-gd-native-ttf \
